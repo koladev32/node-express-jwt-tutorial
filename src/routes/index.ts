@@ -8,7 +8,7 @@ import {
 } from "../controllers/menus";
 import {
   loginUser,
-  registerUser
+  registerUser, retrieveToken
 } from "../controllers/users";
 
 const menuRoutes: Router = Router();
@@ -27,6 +27,7 @@ menuRoutes.get("/menu/:id", retrieveMenu);
 
 userRoutes.post("/user/register", registerUser);
 userRoutes.post("/user/login", loginUser);
+userRoutes.post("/user/refresh", retrieveToken)
 
 
 export {menuRoutes, userRoutes};

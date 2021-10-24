@@ -1,10 +1,10 @@
-import { Response, Request, NextFunction } from "express";
+import e, { Response, Request, NextFunction } from "express";
 import { IUser } from "../types/user";
 
 const jwt = require('jsonwebtoken');
 
 
-const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
+const authenticateJWT = async (req: Request, res: Response, next: NextFunction): Promise<e.Response<any, Record<string, any>>> => {
   const authHeader = req.headers.authorization;
 
   if (authHeader) {
@@ -22,9 +22,8 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
       req.user = user;
       next();
     });
-  } else {
-    res.sendStatus(401);
   }
+    return res.sendStatus(401);
 };
 
 export default authenticateJWT;
