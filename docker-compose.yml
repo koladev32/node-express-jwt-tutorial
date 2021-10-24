@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 services:
   api:
     container_name: node_api
@@ -10,4 +10,3 @@ services:
       - "4000:4000"
     command: >
       sh -c "yarn start"
-

@@ -7,13 +7,15 @@ import {
   retrieveMenu,
 } from "../controllers/menus";
 import {
-  loginUser, logoutUser,
-  registerUser, retrieveToken
+  loginUser,
+  logoutUser,
+  registerUser,
+  retrieveToken,
 } from "../controllers/users";
 
 const menuRoutes: Router = Router();
 
-const userRoutes: Router = Router()
+const userRoutes: Router = Router();
 
 // Menu Routes
 
@@ -27,8 +29,7 @@ menuRoutes.get("/menu/:id", retrieveMenu);
 
 userRoutes.post("/user/register", registerUser);
 userRoutes.post("/user/login", loginUser);
-userRoutes.post("/user/refresh", retrieveToken)
-userRoutes.post('user/logout', logoutUser)
+userRoutes.post("/user/refresh", retrieveToken);
+userRoutes.post("user/logout", logoutUser);
 
-
-export {menuRoutes, userRoutes};
+export { menuRoutes, userRoutes };
