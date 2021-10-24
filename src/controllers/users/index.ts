@@ -1,10 +1,9 @@
 import { Response, Request } from "express";
 import { IUser } from "../../types/user";
 import User from "../../models/user"
-import { IMenu } from "../../types/menu";
-import Menu from "../../models/menu";
 
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
 const refreshTokens = [];
 
 const registerUser = async (req: Request, res: Response): Promise<void> => {
@@ -22,36 +21,41 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
       res.status(400).send("User Already Exist. Please Login");
     }
 
-    const encryptedPassword = await bcrypt.hash(password, 10);
-
     const user: IUser = new User({
       username: username,
-      password: encryptedPassword
     });
 
-    const newUser: IUser = await user.save();
+    const salt = await bcrypt.genSalt(10);
+    // now we set user password to hashed password
+    user.password = await bcrypt.hash(password, salt);
 
-    // Generating Access and refresh token
-    const token = jwt.sign(
-      { user_id: newUser._id, username },
-      process.env.JWT_SECRET_KEY,
-      {
-        expiresIn: "5min",
+    user.save().then(
+      (doc) => {
+        // Generating Access and refresh token
+        const token = jwt.sign(
+          { user_id: doc._id, username },
+          process.env.JWT_SECRET_KEY,
+          {
+            expiresIn: "5min",
+          }
+        );
+
+        const refreshToken = jwt.sign(
+          { user_id: doc._id, username },
+          process.env.JWT_SECRET_KEY
+        );
+
+        refreshTokens.push(refreshToken);
+
+        res.status(201).json({
+          user: doc,
+          token: token,
+          refresh: refreshToken
+        });
       }
     );
 
-    const refreshToken = jwt.sign(
-      { user_id: newUser._id, username },
-      process.env.JWT_SECRET_KEY
-    );
 
-    refreshTokens.push(refreshToken);
-
-    res.status(201).json({
-      user: newUser,
-      token: token,
-      refresh: refreshToken
-    });
   } catch (error) {
     throw error;
   }
