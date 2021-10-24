@@ -7,6 +7,7 @@ import {
   retrieveMenu,
 } from "../controllers/menus";
 import {
+  loginUser,
   registerUser
 } from "../controllers/users";
 
@@ -25,5 +26,7 @@ menuRoutes.get("/menu/:id", retrieveMenu);
 // User Routes
 
 userRoutes.post("/user/register", registerUser);
+userRoutes.post("/user/login", loginUser);
+
 
 export {menuRoutes, userRoutes};
