@@ -5,7 +5,7 @@ import { IMenu } from "../../types/menu";
 
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
-const refreshTokens: string[] = [];
+let refreshTokens: string[] = [];
 
 const registerUser = async (req: Request, res: Response): Promise<e.Response<any, Record<string, any>>> => {
   try {
@@ -143,6 +143,17 @@ const retrieveToken = async (req: Request, res: Response): Promise<e.Response<an
   }
 };
 
+const logoutUser = async (req: Request, res: Response): Promise<e.Response<any, Record<string, any>>> => {
+  try {
+    const { refresh } = req.body;
+    refreshTokens = refreshTokens.filter(token => refresh !== token);
+
+    return res.status(200).send("Logout successful");
+
+  } catch (error) {
+    throw error;
+  }
+};
 
 
-export {registerUser, loginUser, retrieveToken};
+export {registerUser, loginUser, retrieveToken, logoutUser};
