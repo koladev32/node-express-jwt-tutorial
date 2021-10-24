@@ -2,7 +2,6 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import menuRoutes from "./routes";
-const jwt = require('jsonwebtoken');
 
 const app = express();
 
